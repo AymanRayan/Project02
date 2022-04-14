@@ -24,7 +24,7 @@ class ProductHandler {
    static async create(req:Request , res:Response){
         try{
             const result = await ProductModel.create({
-                name: req.body.name,
+                the_name: req.body.the_name,
                 price: req.body.price
             });
             const op =jwt.sign(result, process.env.TOKEN as string);
@@ -37,7 +37,7 @@ class ProductHandler {
        try{
            await ProductModel.edit({
                id: parseInt(req.params.id),
-               name: req.body.name,
+               the_name: req.body.the_name,
                price: req.body.price
            });
        }catch(e){

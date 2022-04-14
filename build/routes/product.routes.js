@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const auth_1 = __importDefault(require("../middleware/auth"));
-const product_handler_1 = __importDefault(require("../handlers/product.handler"));
-const productsRoutes = express_1.default.Router();
+var express_1 = __importDefault(require("express"));
+var auth_1 = __importDefault(require("../middleware/auth"));
+var product_handler_1 = __importDefault(require("../handlers/product.handler"));
+var productsRoutes = express_1.default.Router();
 //index
 productsRoutes.get('/show', product_handler_1.default.index);
 //create
