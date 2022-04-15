@@ -15,4 +15,6 @@ productsRoutes.post('/create', auth_1.default, product_handler_1.default.create)
 productsRoutes.get('/show/:id', product_handler_1.default.show);
 //edit
 productsRoutes.put('/edit/:id', auth_1.default, product_handler_1.default.edit);
+//clean table
+productsRoutes.delete('/clean', auth_1.default, product_handler_1.default.cleanAll);
 exports.default = productsRoutes;

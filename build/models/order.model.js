@@ -121,7 +121,7 @@ var OrderModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        sql = "select * from ".concat(this.table, " where id=($1)");
+                        sql = "select * from ".concat(this.table, " where user_id=($1)");
                         return [4 /*yield*/, doQuery(sql, [id])];
                     case 1:
                         result = _a.sent();
@@ -169,6 +169,46 @@ var OrderModel = /** @class */ (function () {
                     case 2:
                         e_6 = _a.sent();
                         throw new Error("MODEL ERR: can't addOrders due to : ".concat(e_6));
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrderModel.clearCart = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, e_7;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        sql = 'delete from order_product_table';
+                        return [4 /*yield*/, doQuery(sql)];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_7 = _a.sent();
+                        throw new Error("MODEL ERR: can't clear cart due to : ".concat(e_7));
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrderModel.cleanTable = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, e_8;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        sql = "delete from ".concat(this.table);
+                        return [4 /*yield*/, doQuery(sql)];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_8 = _a.sent();
+                        throw new Error("MODEL ERR: can't clean data due to : ".concat(e_8));
                     case 3: return [2 /*return*/];
                 }
             });

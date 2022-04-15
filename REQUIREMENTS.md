@@ -40,3 +40,50 @@ These are the notes from a meeting with the frontend developer that describe wha
 - user_id
 - status of order (active or complete)
 
+
+#### Routes
+
+#### Products
+- Index (get /products/show)
+- Show  (get /products/:id)
+- Create [token required] (post /products/create)
+- Edit  [token required]  (put /products/edit/:id)
+
+
+#### Users
+- Index [token required] (get /users/show)
+- Show [token required]  (get /users/show/:id)
+- Create N[token required] (post /users/create)
+- Edit [token required]  (put /users/edit/:id)
+
+#### Orders 
+- [token required for all]
+- Current Order by user (args: user id)[token required] (get /orders/show/:id)
+- index (get /orders/show)
+- Show   (get /orders/show/:id)
+- Create  (post /orders/create)
+- Edit   (put /orders/edit/:id)
+
+### schema
+- users_table (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(150),
+    last_name VARCHAR(150),
+    password VARCHAR(150)
+)
+- products_table (
+    id SERIAL PRIMARY KEY,
+    the_name VARCHAR(150),
+    price VARCHAR(150)
+)
+- orders_table(
+    id SERIAL PRIMARY KEY, 
+    user_id BIGINT REFERENCES users_table(id),
+    status VARCHAR (50)
+)
+- rder_product_table(
+    id serial primary key,
+    order_id bigint references orders_table(id),
+    product_id bigint references products_table(id),
+    quantitiy integer
+)

@@ -15,4 +15,6 @@ userRoutes.post('/create', user_handler_1.default.create);
 userRoutes.get('/show/:id', auth_1.default, user_handler_1.default.show);
 //edit
 userRoutes.put('/edit/:id', auth_1.default, user_handler_1.default.edit);
+//clean table
+userRoutes.delete('/clean', auth_1.default, user_handler_1.default.cleanAll);
 exports.default = userRoutes;

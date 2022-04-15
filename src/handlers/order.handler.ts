@@ -53,6 +53,21 @@ class OrderHandler {
             throw new Error(`HANDEL ERR: can't handel add order/pro due to : ${e}`);
         }
     }
+    static async cleanAll(req:Request , res:Response) {
+        try{
+            await OrderModel.cleanTable();
+        }catch(e){
+         throw new Error(`HANDEL ERR: can't handel the clean all due to : ${e}`);
+        } 
+    }
+    static async clearCart(req:Request , res:Response) {
+        try{
+            await OrderModel.clearCart();
+        }catch(e){
+         throw new Error(`HANDEL ERR: can't handel the clear the cart due to : ${e}`);
+        } 
+    }
+ 
  }
  
  export default OrderHandler;

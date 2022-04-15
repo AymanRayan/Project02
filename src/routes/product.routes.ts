@@ -16,5 +16,6 @@ productsRoutes.get('/show/:id',ProductHandler.show);
 //edit
 productsRoutes.put('/edit/:id',auth,ProductHandler.edit);
 
-
+//clean table
+productsRoutes.delete('/clean',auth,ProductHandler.cleanAll);
 export default productsRoutes;

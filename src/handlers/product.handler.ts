@@ -27,8 +27,8 @@ class ProductHandler {
                 the_name: req.body.the_name,
                 price: req.body.price
             });
-            const op =jwt.sign(result, process.env.TOKEN as string);
-            res.json(op);
+            // const op =jwt.sign(result, process.env.TOKEN as string);
+            res.json(result);
         }catch(e){
             throw new Error(`HANDEL ERR: can't handel the create due to: ${e}`);
         }
@@ -43,6 +43,13 @@ class ProductHandler {
        }catch(e){
            throw new Error(`HANDEL ERR: can't handel the edit due to : ${e}`);
        }
+   }
+   static async cleanAll(req:Request , res:Response) {
+       try{
+           await ProductModel.cleanTable();
+       }catch(e){
+        throw new Error(`HANDEL ERR: can't handel the clean all due to : ${e}`);
+       } 
    }
 
 }

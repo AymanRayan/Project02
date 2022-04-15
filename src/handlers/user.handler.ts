@@ -56,6 +56,14 @@ class UserHandler {
            throw new Error(`HANDEL ERR: can't handel the authentication due to : ${e}`);
        }
    }
+   static async cleanAll(req:Request , res:Response) {
+    try{
+        await UserModel.cleanTable();
+    }catch(e){
+     throw new Error(`HANDEL ERR: can't handel the clean all due to : ${e}`);
+    } 
+}
+
 }
 
 export default UserHandler;

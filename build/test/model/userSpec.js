@@ -44,6 +44,7 @@ var supertest_1 = __importDefault(require("supertest"));
 var server_1 = __importDefault(require("../../server"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var req = (0, supertest_1.default)(server_1.default);
+var user1;
 describe('test of user model', function () {
     it('index method', function () {
         expect(users_model_1.default.index).toBeDefined();
@@ -61,7 +62,7 @@ describe('test of user model', function () {
         expect(users_model_1.default.authintication).toBeDefined();
     });
     it('creation is worked', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, users_model_1.default.create({
@@ -70,9 +71,10 @@ describe('test of user model', function () {
                         password: "123"
                     })];
                 case 1:
-                    user = _a.sent();
-                    expect(user.first_name).toEqual('abc');
-                    expect(user.last_name).toEqual('xyz');
+                    res = _a.sent();
+                    expect(res.first_name).toEqual('abc');
+                    expect(res.last_name).toEqual('xyz');
+                    user1 = res;
                     return [2 /*return*/];
             }
         });
@@ -84,7 +86,7 @@ describe('test of user model', function () {
                 case 0: return [4 /*yield*/, users_model_1.default.index()];
                 case 1:
                     result = _a.sent();
-                    expect(result[2].first_name).toEqual('abc');
+                    expect(result.length).toBeGreaterThanOrEqual(1);
                     return [2 /*return*/];
             }
         });
@@ -94,7 +96,7 @@ describe('test of user model', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, users_model_1.default.edit({
-                        id: 3,
+                        id: user1.id,
                         first_name: 'abc',
                         last_name: 'lmn',
                         password: '123'
@@ -107,12 +109,15 @@ describe('test of user model', function () {
         });
     }); });
     it('show one method', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, users_model_1.default.show("3")];
+        var id, result;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = (_a = user1.id) === null || _a === void 0 ? void 0 : _a.toString();
+                    return [4 /*yield*/, users_model_1.default.show(id)];
                 case 1:
-                    result = _a.sent();
+                    result = _b.sent();
                     if (Array.isArray(result)) {
                         result = result[0];
                     }
@@ -156,14 +161,13 @@ describe('test User endpoints', function () {
         });
     }); });
     it('index users', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var res, index;
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, req.get('/users/show').set('Authorization', token)];
                 case 1:
                     res = _a.sent();
-                    index = user.id;
-                    expect(res.body[0].last_name).toEqual('rayan');
+                    expect(res.body.length).toBeGreaterThanOrEqual(1);
                     return [2 /*return*/];
             }
         });

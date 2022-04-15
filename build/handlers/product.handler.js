@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var product_model_1 = __importDefault(require("../models/product.model"));
 var ProductHandler = /** @class */ (function () {
     function ProductHandler() {
@@ -88,7 +87,7 @@ var ProductHandler = /** @class */ (function () {
     };
     ProductHandler.create = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, op, e_3;
+            var result, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -99,8 +98,8 @@ var ProductHandler = /** @class */ (function () {
                             })];
                     case 1:
                         result = _a.sent();
-                        op = jsonwebtoken_1.default.sign(result, process.env.TOKEN);
-                        res.json(op);
+                        // const op =jwt.sign(result, process.env.TOKEN as string);
+                        res.json(result);
                         return [3 /*break*/, 3];
                     case 2:
                         e_3 = _a.sent();
@@ -128,6 +127,25 @@ var ProductHandler = /** @class */ (function () {
                     case 2:
                         e_4 = _a.sent();
                         throw new Error("HANDEL ERR: can't handel the edit due to : ".concat(e_4));
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ProductHandler.cleanAll = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, product_model_1.default.cleanTable()];
+                    case 1:
+                        _a.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_5 = _a.sent();
+                        throw new Error("HANDEL ERR: can't handel the clean all due to : ".concat(e_5));
                     case 3: return [2 /*return*/];
                 }
             });

@@ -16,5 +16,9 @@ orderRoutes.get('/show/:id', auth_1.default, order_handler_1.default.show);
 //edit
 orderRoutes.put('/edit/:id', auth_1.default, order_handler_1.default.edit);
 //addOrder/pro
-orderRoutes.post('cart', auth_1.default, order_handler_1.default.addOrderPro);
+orderRoutes.post('/cart', auth_1.default, order_handler_1.default.addOrderPro);
+//clear the cart
+orderRoutes.delete('/clearAll', auth_1.default, order_handler_1.default.clearCart);
+//clean table
+orderRoutes.delete('/clean', auth_1.default, order_handler_1.default.cleanAll);
 exports.default = orderRoutes;

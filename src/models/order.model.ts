@@ -44,7 +44,7 @@ class OrderModel {
      }
      static async show(id:string){
          try{
-             const sql =`select * from ${this.table} where id=($1)`;
+             const sql =`select * from ${this.table} where user_id=($1)`;
              const result = await doQuery(sql,[id]);
              return result.rows[0];  
          }catch(e){
@@ -67,6 +67,22 @@ class OrderModel {
              return result.rows[0];
          }catch(e){
              throw new Error (`MODEL ERR: can't addOrders due to : ${e}`);
+         }
+     }
+     static async clearCart(){
+         try{
+            const sql = 'delete from order_product_table';
+              await doQuery(sql);
+         }catch(e){
+            throw new Error (`MODEL ERR: can't clear cart due to : ${e}`);
+         }
+     }
+     static async cleanTable(){
+         try{
+              const sql = `delete from ${this.table}`;
+              await doQuery(sql);
+         }catch(e){
+            throw new Error (`MODEL ERR: can't clean data due to : ${e}`);
          }
      }
 }

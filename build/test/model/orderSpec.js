@@ -40,7 +40,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var order_model_1 = __importDefault(require("../../models/order.model"));
+var supertest_1 = __importDefault(require("supertest"));
+var server_1 = __importDefault(require("../../server"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var req = (0, supertest_1.default)(server_1.default);
+var order;
+var user1;
+var pro;
+var token;
 describe('test of order model', function () {
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.post('/users/create').send({
+                        first_name: 'super',
+                        last_name: "admin2",
+                        password: 'admin2'
+                    })];
+                case 1:
+                    res = _a.sent();
+                    token = res.body;
+                    user1 = jsonwebtoken_1.default.decode(token);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.post('/products/create').send({
+                        the_name: "shirt",
+                        price: "150"
+                    }).set('Authorization', token)];
+                case 1:
+                    res = _a.sent();
+                    pro = res.body;
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('index method', function () {
         expect(order_model_1.default.index).toBeDefined();
     });
@@ -57,29 +97,34 @@ describe('test of order model', function () {
         expect(order_model_1.default.addOrderPro).toBeDefined();
     });
     it('creation is worked', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var order;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, order_model_1.default.create({
-                        user_id: "1",
-                        status: "complete"
-                    })];
+        var id, res;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = (_a = user1.id) === null || _a === void 0 ? void 0 : _a.toString();
+                    return [4 /*yield*/, order_model_1.default.create({
+                            user_id: id,
+                            status: "complete"
+                        })];
                 case 1:
-                    order = _a.sent();
-                    expect(order.status).toEqual('complete');
+                    res = _b.sent();
+                    order = res;
+                    expect(res.status).toEqual('complete');
                     return [2 /*return*/];
             }
         });
     }); });
     it('cart is worked', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+        var orderid, proid, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, order_model_1.default.addOrderPro(1, 1, 2)];
+                case 0:
+                    orderid = order.id;
+                    proid = pro.id;
+                    return [4 /*yield*/, order_model_1.default.addOrderPro(orderid, proid, 2)];
                 case 1:
                     result = _a.sent();
-                    expect(result.order_id).toEqual('1');
-                    expect(result.product_id).toEqual('1');
                     expect(result.quantitiy).toEqual(2);
                     return [2 /*return*/];
             }
@@ -92,42 +137,79 @@ describe('test of order model', function () {
                 case 0: return [4 /*yield*/, order_model_1.default.index()];
                 case 1:
                     result = _a.sent();
-                    expect(result[0].user_id).toEqual('1');
+                    expect(result.length).toBeGreaterThanOrEqual(1);
                     return [2 /*return*/];
             }
         });
     }); });
     it('edit method', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var order;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, order_model_1.default.edit({
-                        id: 1,
-                        user_id: '1',
-                        status: 'active'
-                    })];
+        var id, orderid, res;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = (_a = user1.id) === null || _a === void 0 ? void 0 : _a.toString();
+                    orderid = order.id;
+                    return [4 /*yield*/, order_model_1.default.edit({
+                            id: orderid,
+                            user_id: id,
+                            status: 'active'
+                        })];
                 case 1:
-                    order = _a.sent();
-                    expect(order.status).toEqual('active');
+                    res = _b.sent();
+                    expect(res.status).toEqual('active');
                     return [2 /*return*/];
             }
         });
     }); });
     it('show one method', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+        var id, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, order_model_1.default.show("1")];
+                case 0:
+                    id = String(user1.id);
+                    return [4 /*yield*/, order_model_1.default.show(id)];
                 case 1:
                     result = _a.sent();
                     if (Array.isArray(result)) {
                         result = result[0];
                     }
-                    expect(result.user_id).toEqual('1');
+                    expect(result.user_id).toEqual(id);
                     return [2 /*return*/];
             }
         });
     }); });
 });
-// describe('test of order endPoints', () => {
-// });
+describe('test of order endPoints', function () {
+    it('create order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.post('/orders/create').send({
+                        user_id: user1.id,
+                        status: 'finshed'
+                    }).set('Authorization', token)];
+                case 1:
+                    res = _a.sent();
+                    order = res.body;
+                    expect(order.status).toEqual('finshed');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('get order by user id', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res, id;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, req.get("/orders/show/".concat(user1.id)).set('Authorization', token)];
+                case 1:
+                    res = _b.sent();
+                    ;
+                    id = (_a = user1.id) === null || _a === void 0 ? void 0 : _a.toString();
+                    expect(res.body.user_id).toEqual(id);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

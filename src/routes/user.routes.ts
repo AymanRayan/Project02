@@ -16,5 +16,6 @@ userRoutes.get('/show/:id',auth,UserHandler.show);
 //edit
 userRoutes.put('/edit/:id',auth,UserHandler.edit);
 
-
+//clean table
+userRoutes.delete('/clean',auth,UserHandler.cleanAll);
 export default userRoutes;

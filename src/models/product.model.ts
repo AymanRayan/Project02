@@ -61,6 +61,15 @@ async function doQuery(sql: string , params?: (string|number|undefined)[]) {
              throw new Error (`MODEL ERR: can't edit that raw due to : ${e}`);
           }
       }
+
+      static async cleanTable(){
+        try{
+             const sql = `delete from ${this.table}`;
+             await doQuery(sql);
+        }catch(e){
+           throw new Error (`MODEL ERR: can't clean data due to : ${e}`);
+        }
+    }
    
 }
 

@@ -17,6 +17,11 @@ orderRoutes.get('/show/:id',auth,OrderHandler.show);
 orderRoutes.put('/edit/:id',auth,OrderHandler.edit);
 
 //addOrder/pro
-orderRoutes.post('cart',auth,OrderHandler.addOrderPro);
+orderRoutes.post('/cart',auth,OrderHandler.addOrderPro);
 
+//clear the cart
+orderRoutes.delete('/clearAll',auth,OrderHandler.clearCart);
+
+//clean table
+orderRoutes.delete('/clean',auth,OrderHandler.cleanAll);
 export default orderRoutes;

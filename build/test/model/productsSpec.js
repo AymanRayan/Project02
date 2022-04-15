@@ -40,6 +40,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var product_model_1 = __importDefault(require("../../models/product.model"));
+var supertest_1 = __importDefault(require("supertest"));
+var server_1 = __importDefault(require("../../server"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var req = (0, supertest_1.default)(server_1.default);
+var pro;
 describe('test of products model', function () {
     it('index method', function () {
         expect(product_model_1.default.index).toBeDefined();
@@ -54,7 +59,7 @@ describe('test of products model', function () {
         expect(product_model_1.default.edit).toBeDefined();
     });
     it('creation is worked', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var pro;
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, product_model_1.default.create({
@@ -62,9 +67,10 @@ describe('test of products model', function () {
                         price: "111"
                     })];
                 case 1:
-                    pro = _a.sent();
-                    expect(pro.the_name).toEqual('abc');
-                    expect(pro.price).toEqual('111');
+                    res = _a.sent();
+                    expect(res.the_name).toEqual('abc');
+                    expect(res.price).toEqual('111');
+                    pro = res;
                     return [2 /*return*/];
             }
         });
@@ -76,34 +82,37 @@ describe('test of products model', function () {
                 case 0: return [4 /*yield*/, product_model_1.default.index()];
                 case 1:
                     result = _a.sent();
-                    expect(result[0].the_name).toEqual('abc');
+                    expect(result.length).toBeGreaterThanOrEqual(1);
                     return [2 /*return*/];
             }
         });
     }); });
     it('edit method', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var pro;
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, product_model_1.default.edit({
-                        id: 1,
+                        id: pro.id,
                         the_name: 'abc',
                         price: '222'
                     })];
                 case 1:
-                    pro = _a.sent();
-                    expect(pro.price).toEqual('222');
+                    res = _a.sent();
+                    expect(res.price).toEqual('222');
                     return [2 /*return*/];
             }
         });
     }); });
     it('show one method', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, product_model_1.default.show("1")];
+        var id, result;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    id = (_a = pro.id) === null || _a === void 0 ? void 0 : _a.toString();
+                    return [4 /*yield*/, product_model_1.default.show(id)];
                 case 1:
-                    result = _a.sent();
+                    result = _b.sent();
                     if (Array.isArray(result)) {
                         result = result[0];
                     }
@@ -113,5 +122,65 @@ describe('test of products model', function () {
         });
     }); });
 });
-// describe('test product handler', ()=> {
-// });
+describe('test product handler', function () {
+    var token;
+    var user;
+    var product;
+    beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.post('/users/create').send({
+                        first_name: 'super',
+                        last_name: "admin",
+                        password: 'admin'
+                    })];
+                case 1:
+                    res = _a.sent();
+                    token = res.body;
+                    user = jsonwebtoken_1.default.decode(token);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('create product by super admin', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.post('/products/create').send({
+                        the_name: "desk",
+                        price: '1000'
+                    }).set('Authorization', token)];
+                case 1:
+                    res = _a.sent();
+                    product = res.body;
+                    expect(product.price).toEqual('1000');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('index products', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.get('/products/show')];
+                case 1:
+                    res = _a.sent();
+                    expect(res.body.length).toBeGreaterThanOrEqual(1);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('show one product', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, req.get("/products/show/".concat(product.id))];
+                case 1:
+                    res = _a.sent();
+                    expect(res.body.the_name).toEqual('desk');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
