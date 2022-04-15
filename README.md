@@ -5,9 +5,13 @@
 create folder named '.env' contains:-
 
 ==============
+### .env file data
 
+ENV=dev
 POSTGRES_HOST=127.0.0.1
+PORT=5432
 POSTGRES_DB=thestore
+POSTGRES_TEST=test
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=ayman
 SALT=10
@@ -34,8 +38,11 @@ Your application must make use of the following libraries:
 
 `npm run test` 
 
-build server and run jasmine and store data at thestore database
+set the ENV to equal test build server then migrate up for test env ..now ready to run jasmine after all reset the migration.
 
+
+==================
+## can user api for clear data by Postman
 to clear data use postman Api by these routes
 
 [delete] (/{orders,users,products}/clean) after using (/orders/clearAll) to delete cart table

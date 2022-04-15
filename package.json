@@ -9,8 +9,10 @@
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "lint": "eslint src/**/*.ts",
     "lint:f": "eslint src/**/*.ts --fix",
-    "test": "npx tsc && npm run build && jasmine",
-    "tsc": "tsc"
+    "test": "set ENV=test&& npx tsc && npm run build && db-migrate up --env test && jasmine && db-migrate reset",
+    "tsc": "tsc",
+    "migration:run":"db-migrate up -c 4",
+    "migration:down":"db-migrate down -c 4"
   },
   "author": "Udacity",
   "license": "ISC",
